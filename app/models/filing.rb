@@ -1,3 +1,4 @@
 class Filing < ApplicationRecord
-  belongs_to :award
+  has_many :awards
+  belongs_to :filer, class_name: 'Organization'
 end
