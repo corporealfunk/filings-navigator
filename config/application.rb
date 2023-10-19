@@ -1,5 +1,6 @@
 require_relative "boot"
 
+# TODO: we should choose what we want here, like we don't action_mailbox, etc:
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
