@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "home#index"
 
-  namespace :api do
+  namespace :api, :defaults => { :format => 'json' }  do
 =begin
     resources :organizations, :only => [:index, :get] do
       resources :filings, :only => [:index, :get]
