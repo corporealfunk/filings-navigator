@@ -1,9 +1,19 @@
 class FilingMapper
+
+  # TODO: this takes in a whole XML string. Maybe we should just pass an IO
+  # object and figure out here how to read these XML files a little more
+  # efficiently instead of reading them into memory
   def initialize(xml_string)
     @doc = Ox.load(xml_string)
   end
 
-  # TODO: EIN numbers can be blank!
+  # This method is idempotent. You can import any xml file
+  # multiple times at it will not just keep adding new records,
+  # it does this by assuming the organizational EIN/Name combos
+  # are unique. That may not be the case in a wider data set,
+  # but I'm making that assumption here. I had hoped to make this
+  # idempotent by linking everything to a filer or recipient's EIN,
+  # but EIN numbers can be blank! so.. EIN/name combo it is
   def map_to_db!
     filer_attrs = self.get_filer_attributes
 
@@ -22,7 +32,7 @@ class FilingMapper
 
       filer.update!(filer_attrs)
 
-      # Assumes that all XML filings/returns have a unique timestamp per Filer/EIN
+      # Assumes that all XML filings/returns have a unique timestamp per Filer (EIN/name combo)
       filing = Filing.find_or_create_by(
         filer: filer,
         return_timestamp: filing_attrs[:return_timestamp]
@@ -30,25 +40,21 @@ class FilingMapper
 
       filing.update!(filing_attrs)
 
-      award_and_receipient_attrs.each do |ar_attrs|
+      award_and_receipient_attrs.each_with_index do |recipient_award|
+        recipient_attrs = recipient_award[:recipient_attrs]
+        award_attrs = recipient_award[:award_attrs]
+
         # assume EIN / name combinations are unique
         # should we have a unique DB key on those?
         recipient = Organization.find_or_create_by(
-          ein: ar_attrs[:ein],
-          name: ar_attrs[:name]
+          ein: recipient_attrs[:ein],
+          name: recipient_attrs[:name]
         )
-
-        # this is a little messy to have shoved the amount into
-        # the rest of the receipient attributes :(
-        amount = ar_attrs[:amount]
-
-        ar_attrs.delete(:amount)
-
-        recipient.update!(ar_attrs)
 
         award = Award.find_or_create_by(
           filing: filing,
-          amount: amount,
+          amount: award_attrs[:amount],
+          purpose: award_attrs[:purpose],
           recipient: recipient
         )
       end
@@ -82,20 +88,42 @@ class FilingMapper
   end
 
   # array of awards and nested receipient attributes
+  # returns array of hashes wiht keys:
+  # :recipient_attrs
+  # :award_attrs
   def get_all_award_and_receipient_attributes
-    ox_paths = {
+    ox_paths_recipient = {
       name: 'RecipientBusinessName/BusinessNameLine1Txt',
       ein: 'RecipientEIN',
       address_line_1: 'USAddress/AddressLine1Txt',
       address_city: 'USAddress/CityNm',
       address_state: 'USAddress/StateAbbreviationCd',
       address_zip: 'USAddress/ZIPCd',
-      amount: 'CashGrantAmt'
+    }
+
+    ox_paths_award = {
+      amount: 'CashGrantAmt',
+      purpose: 'PurposeOfGrantTxt'
     }
 
     # recipient nodes with
-    @doc.locate('Return/ReturnData/IRS990ScheduleI/RecipientTable').map do |recipient_node|
-      self.map_ox_paths_to_attributes(ox_paths, recipient_node)
+    results = @doc.locate('Return/ReturnData/IRS990ScheduleI/RecipientTable').map do |recipient_node|
+      {
+        recipient_attrs: self.map_ox_paths_to_attributes(
+          ox_paths_recipient,
+          recipient_node
+        ),
+        award_attrs: self.map_ox_paths_to_attributes(
+          ox_paths_award,
+          recipient_node
+        )
+      }
+    end
+
+    # If name && EIN are blank, we are going to purge those:
+    results.select do |recipient_award|
+      recipient_attrs = recipient_award[:recipient_attrs]
+      recipient_attrs[:name].present? && recipient_attrs[:ein].present?
     end
   end
 

@@ -14,6 +14,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_18_185757) do
   create_table "awards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "filing_id"
     t.integer "amount"
+    t.string "purpose"
     t.bigint "recipient_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

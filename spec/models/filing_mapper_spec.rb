@@ -61,13 +61,18 @@ describe FilingMapper do
     it "returns filing attributes" do
       expect(@filing_mapper.get_all_award_and_receipient_attributes).to include(
         {
-          :address_city=>"Pasadena",
-          :address_line_1=>"PO Box 93397",
-          :address_state=>"CA",
-          :address_zip=>"911093397",
-          :ein=>"954527969",
-          :grant_amount=>"52064",
-          :name=>"Young & Healthy"
+          recipient_attrs: {
+            :address_city=>"Pasadena",
+            :address_line_1=>"PO Box 93397",
+            :address_state=>"CA",
+            :address_zip=>"911093397",
+            :ein=>"954527969",
+            :name=>"Young & Healthy"
+          },
+          award_attrs: {
+            amount: '52064',
+            purpose: 'General Support'
+          }
         }
       )
     end
