@@ -20,6 +20,7 @@ gem 'dotenv-rails'
 
 # XML parser
 gem 'ox'
+gem 'jsbundling-rails'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"

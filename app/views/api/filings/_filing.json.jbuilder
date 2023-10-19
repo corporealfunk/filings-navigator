@@ -1,3 +1,5 @@
+# TODO: a prod app should have UUIDs not exposing sequential ids:
+json.id filing.id
 json.return_timestamp filing.return_timestamp
 json.tax_period_end_date filing.tax_period_end_date
 json.is_ammended filing.is_ammended?

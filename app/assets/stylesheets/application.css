@@ -13,3 +13,13 @@
  *= require_tree .
  *= require_self
  */
+
+.subdata {
+  font-size: 0.8em;
+  color: gray;
+  font-style: italic;
+}
+
+td {
+  line-height: 1em;
+}
