@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_18_185757) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_19_173330) do
   create_table "awards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "filing_id"
     t.integer "amount"
@@ -27,6 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_18_185757) do
     t.boolean "is_ammended"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_canonical", default: false
   end
 
   create_table "organizations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

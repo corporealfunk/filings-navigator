@@ -21,5 +21,8 @@ namespace :filings do
 
       filing_mapper.map_to_db!
     end
+
+    puts "Auditing Canonical Return Flags"
+    Filing.audit_canonical_flag!
   end
 end
