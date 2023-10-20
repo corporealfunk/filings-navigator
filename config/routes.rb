@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
+  # React app!
   root "home#index"
 
   namespace :api, :defaults => { :format => 'json' }  do
@@ -11,8 +11,10 @@ Rails.application.routes.draw do
     end
 =end
 
-    resources :filings, :only => [:index, :get] do
-      resources :awards, :only => [:index, :get]
-    end
+    resources :filings, :only => [:index, :show]
+  end
+
+  get '*path', to: "home#index", constraints: ->(request) do
+    !request.xhr? && request.format.html?
   end
 end

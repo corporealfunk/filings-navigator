@@ -9,4 +9,9 @@ class Api::FilingsController < ApplicationController
     #   format.xml
     # end
   end
+
+  def show
+    # avoid n+1 queries since we are sending down a lot in the view:
+    @filing = Filing.includes(awards: :recipient).find(params[:id])
+  end
 end

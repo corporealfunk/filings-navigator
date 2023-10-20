@@ -1,21 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import SideBar from './components/SideBar.js';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Filings from './components/Filings.js';
+import Filing from './components/Filing.js';
+import Layout from './components/Layout.js';
 
 function App() {
   return (
-    <div class="container">
-      <div class="row">
-        <div class="three columns">
-          <SideBar/>
-        </div>
-        <div class="nine columns">
-          <Filings/>
-        </div>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={ <Layout /> } >
+          <Route index element={ <Filings /> }/>
+          <Route path="filings/:id" element={<Filing />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
@@ -23,3 +22,4 @@ ReactDOM.render(
   <App/>,
   document.getElementById('root'),
 );
+

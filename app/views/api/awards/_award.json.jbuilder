@@ -1,3 +1,4 @@
+json.id award.id
 json.amount award.amount
 json.purpose award.purpose
 

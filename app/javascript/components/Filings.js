@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function TableRow({ filingId, filer, taxPeriodEndDate, returnTimestamp, awardsCount }) {
 
-  const awardsPath = `/filings/${filingId}/awards`;
+  const filingPath = `/filings/${filingId}`;
 
   return (
     <tr key={ filingId }>
@@ -18,7 +19,7 @@ function TableRow({ filingId, filer, taxPeriodEndDate, returnTimestamp, awardsCo
       <td>{ new Date(returnTimestamp).toLocaleDateString() }</td>
       <td>
         { awardsCount > 0
-          ? <a href={ awardsPath }>{ awardsCount }</a>
+          ? <Link to={ filingPath }>{ awardsCount }</Link>
           : '0'
         }
       </td>
