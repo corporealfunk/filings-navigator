@@ -32,7 +32,7 @@ export default function Filings() {
 
   const getData = async() => {
     const { data } = await axios.get('/api/filings');
-    setData(data);
+    setData(data.data);
   }
 
   useEffect(() => {

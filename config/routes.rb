@@ -11,7 +11,9 @@ Rails.application.routes.draw do
     end
 =end
 
-    resources :filings, :only => [:index, :show]
+    resources :filings, :only => [:index, :show] do
+      resources :awards, :only => [:index]
+    end
   end
 
   get '*path', to: "home#index", constraints: ->(request) do
