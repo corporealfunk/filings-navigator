@@ -36,3 +36,26 @@ tbody.clickable tr:hover {
   background-color: #ffff99;
   cursor: pointer;
 }
+
+nav {
+  padding-top: 5rem;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.limit {
+  float: right;
+}
+
+.limit select {
+  margin: 0 1rem;
+}
+
+.check {
+  font-weight: bold;
+  color: green;
+}

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import axios from 'axios';
 import Paginator from './Paginator.js';
 
-function TableRow({ filingId, filer, taxPeriodEndDate, returnTimestamp, awardsCount }) {
+function TableRow({ filingId, filer, taxPeriodEndDate, returnTimestamp, awardsCount, isCanonical }) {
 
   const filingPath = `/filings/${filingId}`;
 
@@ -21,6 +21,7 @@ function TableRow({ filingId, filer, taxPeriodEndDate, returnTimestamp, awardsCo
       <td>{ new Date(taxPeriodEndDate).toLocaleDateString() }</td>
       <td>{ new Date(returnTimestamp).toLocaleDateString() }</td>
       <td>{ awardsCount }</td>
+      <td>{ isCanonical && <span class="check">&#10003;</span> }</td>
     </tr>
   )
 }
@@ -57,13 +58,27 @@ export default function Filings() {
   return (
     <>
       <h3>Filings</h3>
+      { isLoading ? null : <Paginator
+        currentPage={ data.pagination.current_page }
+        totalPages={ data.pagination.total_pages }
+        nextPage={ data.pagination.next_page }
+        prevPage={ data.pagination.prev_page }
+        onNextPage={ () => setPage(data.pagination.next_page) }
+        onPrevPage={ () => setPage(data.pagination.prev_page) }
+        onFirstPage={ () => setPage(1) }
+        onLastPage={ () => setPage(data.pagination.total_pages) }
+        limit={ data.pagination.limit }
+        onLimitChange={ (e) => updateLimit(e.target.value) }
+        />
+      }
       { isLoading ? loadingState : (
         <table class="u-full-width">
           <thead>
             <th>Filer</th>
             <th>Tax Year End</th>
             <th>Filing Date</th>
-            <th># of Awards Given</th>
+            <th>Awards Count</th>
+            <th>Canonical</th>
           </thead>
           <tbody className='clickable'>
             { data.data.map((filing) => (
@@ -74,6 +89,7 @@ export default function Filings() {
                   returnTimestamp={filing.return_timestamp}
                   awardsCount={filing.awards_count}
                   awardsPath={filing.awards_path}
+                  isCanonical={filing.is_canonical}
                 />
               )
             )}
@@ -91,7 +107,8 @@ export default function Filings() {
         onLastPage={ () => setPage(data.pagination.total_pages) }
         limit={ data.pagination.limit }
         onLimitChange={ (e) => updateLimit(e.target.value) }
-        /> }
+        />
+      }
     </>
   );
 }

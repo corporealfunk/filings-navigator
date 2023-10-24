@@ -17,7 +17,7 @@ class Api::AwardsController < ApplicationController
     filing = Filing.find_by_id!(params[:filing_id])
 
     pagination_data = Paginator.setup_relation_and_pagination_data(
-      active_record_relation: filing.awards.order(order),
+      active_record_relation: filing.awards.includes(:recipient).order(order),
       page: page,
       limit: limit
     )

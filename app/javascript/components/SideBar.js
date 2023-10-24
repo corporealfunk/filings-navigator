@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 
 export default function SideBar() {
   return (
-    <ul>
-      <li><Link to='/'>Filings</Link></li>
-    </ul>
+    <nav>
+      Menu:
+      <ul>
+        <li><Link to='/'>Filings</Link></li>
+      </ul>
+    </nav>
   );
 }

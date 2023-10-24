@@ -12,6 +12,13 @@ export default function Paginator({
   limit,
   onLimitChange
 }) {
+  // TODO: the input box to select per page/limit isn't a great user experience,
+  // it reloads on every input/change
+  const limitOpts = [];
+  for (let i=1; i <= 100; i++) {
+    limitOpts.push(<option value={i}>{i}</option>);
+  }
+
   return (
     <div className='row'>
       <div className='twelve columns text-center'>
@@ -25,14 +32,15 @@ export default function Paginator({
           { currentPage < totalPages && (<a onClick={ onNextPage }>&gt;</a>) }
           &nbsp;
           { currentPage < totalPages && (<a onClick={ onLastPage }>&gt;&gt;</a>) }
-          <br/>
-          <input
-            value={limit}
-            onChange={onLimitChange}
-            type="number"
-            min="5"
-            max="100"
-          /> per page
+          <div className="limit">
+            <select
+              value={limit}
+              onChange={onLimitChange}
+            >
+              { limitOpts.map((option) => option) }
+            </select>
+            per page
+          </div>
         </p>
       </div>
     </div>
