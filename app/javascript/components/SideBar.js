@@ -1,10 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function SideBar() {
   return (
     <ul>
-      <li>Filings</li>
-      <li>Filers</li>
+      <li><Link to='/'>Filings</Link></li>
     </ul>
   );
 }

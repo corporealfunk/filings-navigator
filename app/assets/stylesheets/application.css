@@ -23,3 +23,16 @@
 td {
   line-height: 1em;
 }
+
+.text-center {
+  text-align: center;
+}
+
+a {
+  cursor: pointer;
+}
+
+tbody.clickable tr:hover {
+  background-color: #ffff99;
+  cursor: pointer;
+}

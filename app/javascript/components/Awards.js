@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+// TODO: we don't really need axios, just use fetch API
+import axios from 'axios';
+
 let USDollar = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -22,10 +25,10 @@ function TableRow({ awardId, amount, purpose, recipient }) {
   )
 }
 
-export default function Awards({ data }) {
+export default function Awards({ data, pagination }) {
   return (
     <>
-      <h5>Awards ({ data.length })</h5>
+      <h5>Awards ({ pagination.total_records })</h5>
       <table class="u-full-width">
         <thead>
           <th>Recipient</th>

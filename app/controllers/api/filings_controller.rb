@@ -33,7 +33,14 @@ class Api::FilingsController < ApplicationController
   end
 
   def show
-    # avoid n+1 queries since we are sending down a lot in the view:
-    @filing = Filing.includes(awards: :recipient).find(params[:id])
+    @filing = Filing.find(params[:id])
+    pagination_data = Paginator.setup_relation_and_pagination_data(
+      active_record_relation: @filing.awards.includes(:recipient).order(:id),
+      page: 1,
+      limit: 20
+    )
+
+    @awards = pagination_data[:data]
+    @pagination = pagination_data[:pagination]
   end
 end

@@ -11,7 +11,8 @@ module Paginator
           current_page: nil,
           total_pages: 0,
           next_page: nil,
-          prev_page: nil
+          prev_page: nil,
+          limit: limit
         }
       }
     end
@@ -30,7 +31,8 @@ module Paginator
         current_page: page,
         total_pages: total_pages,
         next_page: page < total_pages ? page + 1 : nil,
-        prev_page: page > 1 ? page - 1 : nil
+        prev_page: page > 1 ? page - 1 : nil,
+        limit: limit
       }
     }
   end
