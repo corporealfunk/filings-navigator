@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Paginator from './Paginator.js';
 
@@ -11,7 +12,7 @@ function TableRow({ filer }) {
   return (
     <tr key={ filer.id } onClick={ () => navigate(filerPath) }>
       <td>
-        { filer.id }
+        <Link to={ filerPath }>{ filer.id }</Link>
       </td>
       <td>
         { filer.name }
