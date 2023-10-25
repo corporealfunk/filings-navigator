@@ -14,8 +14,17 @@ class Api::FilingsController < ApplicationController
       page = 1
     end
 
+    active_record_relation = Filing.sorted
+
+    # if we are scoped to a filer, lets include that:
+    if params[:filer_id]
+       active_record_relation = active_record_relation.where(
+         filer: params[:filer_id]
+       )
+    end
+
     pagination_data = Paginator.setup_relation_and_pagination_data(
-      active_record_relation: Filing.all.sorted,
+      active_record_relation: active_record_relation,
       page: page,
       limit: limit
     )

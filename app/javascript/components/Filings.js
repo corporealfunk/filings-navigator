@@ -28,16 +28,22 @@ function TableRow({ filingId, filer, taxPeriodEndDate, returnTimestamp, awardsCo
   )
 }
 
-export default function Filings() {
+export default function Filings({ filerId }) {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
 
+  let filerScope = '';
+
+  if (filerId) {
+    filerScope = `/filers/${filerId}`;
+  }
+
   const getData = async(page, limit) => {
     setIsLoading(true);
-    const response = await axios.get(`/api/filings?page=${page}&limit=${limit}`);
+    const response = await axios.get(`/api${filerScope}/filings?page=${page}&limit=${limit}`);
     setData(response.data);
     setIsLoading(false);
   }

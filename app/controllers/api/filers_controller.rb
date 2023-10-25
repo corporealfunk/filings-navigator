@@ -33,6 +33,6 @@ class Api::FilersController < ApplicationController
   end
 
   def show
-    @filer = Filing.find(params[:id])
+    @filer = Organization.find(params[:id])
   end
 end

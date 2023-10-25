@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 
 // TODO: we don't really need axios, just use fetch API
 import axios from 'axios';
@@ -13,7 +14,10 @@ function FilingData({ data }) {
         <div class="twelve columns">
           <strong>Filer:</strong>
           <p>
-            { data.filer.name }<br/>
+            <Link to={ `/filers/${data.filer.id }` }>
+              { data.filer.name }
+            </Link>
+            <br/>
             { data.filer.address_line_1 }, { data.filer.address_city }, { data.filer.address_state } { data.filer.address_zip }
           </p>
         </div>

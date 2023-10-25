@@ -8,7 +8,9 @@ Rails.application.routes.draw do
     resources :filings, :only => [:index, :show] do
       resources :awards, :only => [:index]
     end
-    resources :filers, :only => [:index, :show]
+    resources :filers, :only => [:index, :show] do
+      resources :filings, :only => [:index]
+    end
   end
 
   get '*path', to: "home#index", constraints: ->(request) do

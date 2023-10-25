@@ -5,7 +5,7 @@ import Paginator from './Paginator.js';
 
 function TableRow({ filer }) {
 
-  const filerPath = `/filer/${filer.id}`;
+  const filerPath = `/filers/${filer.id}`;
 
   const navigate = useNavigate();
   return (
