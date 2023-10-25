@@ -20,6 +20,8 @@ I would usually lint all my JS with eslint and AirBnB JS rules. I did not do thi
 
 I would probably do a lot more testing, I did test the XML parsing code as I wrote it to make dev a little faster there.
 
+Also -- there are lots of unused gems and I did not comb through that! Also, the app is loading ActionCable and ActiveStorage and other Rails bits that are simply not needed. That should all be removed, and we should only load the Rails stuff we need, but I didn't comb through the config for this.
+
 ## Run on Localhost:
 
 If you run on localhost, you'll need a mysql database running, grant all access to a user and create a .env file with those credentials, like so:
