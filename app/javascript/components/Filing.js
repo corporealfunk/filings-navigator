@@ -70,7 +70,7 @@ export default function Filing() {
 
   return (
     <>
-      <h3>Filing {id}</h3>
+      <h3>Filing (ID {id})</h3>
       <div>
         { isLoading ? loadingState : <FilingData data={ data } /> }
       </div>

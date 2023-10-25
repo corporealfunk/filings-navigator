@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router';
 import axios from 'axios';
 import Paginator from './Paginator.js';
 
-function TableRow({ filingId, filer, taxPeriodEndDate, returnTimestamp, awardsCount, isCanonical }) {
+function TableRow({ filer }) {
 
-  const filingPath = `/filings/${filingId}`;
+  const filerPath = `/filer/${filer.id}`;
 
   const navigate = useNavigate();
   return (
-    <tr key={ filingId } onClick={ () => navigate(filingPath) }>
+    <tr key={ filer.id } onClick={ () => navigate(filerPath) }>
       <td>
-        { filingId }
+        { filer.id }
       </td>
       <td>
         { filer.name }
@@ -20,15 +20,12 @@ function TableRow({ filingId, filer, taxPeriodEndDate, returnTimestamp, awardsCo
           { filer.address_city }, { filer.address_state }
         </span>
       </td>
-      <td>{ new Date(taxPeriodEndDate).toLocaleDateString() }</td>
-      <td>{ new Date(returnTimestamp).toLocaleDateString() }</td>
-      <td>{ awardsCount }</td>
-      <td>{ isCanonical && <span class="check">&#10003;</span> }</td>
+      <td>{ filer.ein }</td>
     </tr>
   )
 }
 
-export default function Filings() {
+export default function Filers() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +34,7 @@ export default function Filings() {
 
   const getData = async(page, limit) => {
     setIsLoading(true);
-    const response = await axios.get(`/api/filings?page=${page}&limit=${limit}`);
+    const response = await axios.get(`/api/filers?page=${page}&limit=${limit}`);
     setData(response.data);
     setIsLoading(false);
   }
@@ -58,7 +55,7 @@ export default function Filings() {
 
   return (
     <>
-      <h3>Filings</h3>
+      <h3>Filers</h3>
       { isLoading ? null : <Paginator
         currentPage={ data.pagination.current_page }
         totalPages={ data.pagination.total_pages }
@@ -77,21 +74,12 @@ export default function Filings() {
           <thead>
             <th>Id</th>
             <th>Filer</th>
-            <th>Tax Year End</th>
-            <th>Filing Date</th>
-            <th>Awards Count</th>
-            <th>Canonical</th>
+            <th>EIN</th>
           </thead>
           <tbody className='clickable'>
-            { data.data.map((filing) => (
+            { data.data.map((filer) => (
                 <TableRow
-                  filingId={filing.id}
-                  filer={filing.filer}
-                  taxPeriodEndDate={filing.tax_period_end_date}
-                  returnTimestamp={filing.return_timestamp}
-                  awardsCount={filing.awards_count}
-                  awardsPath={filing.awards_path}
-                  isCanonical={filing.is_canonical}
+                  filer={filer}
                 />
               )
             )}

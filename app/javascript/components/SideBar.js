@@ -7,6 +7,7 @@ export default function SideBar() {
       Menu:
       <ul>
         <li><Link to='/'>Filings</Link></li>
+        <li><Link to='/filers'>Filers</Link></li>
       </ul>
     </nav>
   );

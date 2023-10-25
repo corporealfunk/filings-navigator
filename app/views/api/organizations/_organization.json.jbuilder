@@ -1,3 +1,5 @@
+# TODO: don't expose sequential IDs!
+json.id organization.id
 json.name organization.name
 json.ein organization.ein
 json.address_line_1 organization.address_line_1

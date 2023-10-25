@@ -6,4 +6,6 @@ class Organization < ApplicationRecord
 
   scope :recipients, -> { self.joins(:awards_received).distinct }
   scope :filers, -> { self.joins(:filings).distinct }
+
+  scope :sorted, -> { self.order(:name) }
 end

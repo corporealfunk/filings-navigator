@@ -1,4 +1,4 @@
-class Api::FilingsController < ApplicationController
+class Api::FilersController < ApplicationController
   def index
     # TODO: DRY this out where we have it
     page = (params[:page] || 1).to_i
@@ -15,12 +15,12 @@ class Api::FilingsController < ApplicationController
     end
 
     pagination_data = Paginator.setup_relation_and_pagination_data(
-      active_record_relation: Filing.all.sorted,
+      active_record_relation: Organization.filers.sorted,
       page: page,
       limit: limit
     )
 
-    @filings = pagination_data[:data]
+    @filers = pagination_data[:data]
     @pagination = pagination_data[:pagination]
 
 
@@ -33,6 +33,6 @@ class Api::FilingsController < ApplicationController
   end
 
   def show
-    @filing = Filing.find(params[:id])
+    @filer = Filing.find(params[:id])
   end
 end

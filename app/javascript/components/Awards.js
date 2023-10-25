@@ -14,6 +14,9 @@ function TableRow({ awardId, amount, purpose, recipient }) {
   return (
     <tr key={ awardId }>
       <td>
+        { awardId }
+      </td>
+      <td>
         { recipient.name }
         <br/>
         <span class="subdata">
@@ -44,6 +47,7 @@ function Awards({ data, pagination, onSetPage, onSetLimit }) {
       />
       <table class="u-full-width">
         <thead>
+          <th>Id</th>
           <th>Recipient</th>
           <th>Amount</th>
           <th>Purpopse</th>
