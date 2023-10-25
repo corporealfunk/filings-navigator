@@ -1,5 +1,91 @@
 # README
 
+This is my implementation of the filings app. It uses a MySQL database and React on the frontend. It can be used in Docker, or run on Dokku (self-hosted Heroku-like platform). You can visit my Dokku installation at: http://filings-navigator.dokku.moniaci.net
+
+Note that this project is using ruby 3.1.3 and node 16 for js compilation and bundling. You can use rbenv and nvm to manage versions.
+
+If you run on localhost, you'll need a mysql database running, grant all access to a user and create a .env file with those credentials, like so:
+
+echo 'DATABASE_URL="mysql2://user:pass@localhost/db_name"' > .env
+
+Then:
+
+`bundle install`
+`yarn install`
+`./bin/rails db:reset`
+`./bin/rails filings:import_xml`
+`./bin/dev`
+
+visit:
+http://localhost:3000
+
+## General Notes:
+
+I chose React and am bundling with webpack. It's been a while since I've used React, and I actually wouldn't reach for it for a project like this. I'd much rather use Hotwire/Turbo/Stimlus for a project of this scope and it would work really well.
+
+Data loading from the XML files on the web is done via the task located at `app/lib/tasks/filings.rake`
+
+The only task defined calls out the code in the class located at `app/models/filing_mapper.rb`
+
+The rake task and loading code is idempotent, you can run it as many times as you like.
+
+There are lots of "TODO:" notes all over the code, and there's lots to-do, for sure. I haven't really combed for N+1 queries, definitely some optimizations there. The API views in jbuilder often include data that not every front end call would need, plenty of room for optimization and improvement there. As mentioned, I haven't used React since "useEffect" and some of the other lifecycle methods became a thing, I'm used to the older class definitions and "componentDidMount" type of lifecycle methods, so some of the React code for sure needs a look. There are better ways to load data during ReactRouter route updates, but I'm doing it in-component instead of in the router code. There are times when the front end calls the API twice just to render one view, that should be addressed as well, from an API perspective but also more efficient data loading on the frontend.
+
+I would usually lint all my JS with eslint and AirBnB JS rules. I did not do this for this project.
+
+I would probably do a lot more testing, I did test the XML parsing code as I wrote it to make dev a little faster there.
+
+
+## Docker
+
+To get this up and runing on Docker with docker compose. Clone the repo and then from the code directory:
+
+build:
+`docker-compose build`
+
+bundle install, yarn install and reset the db:
+`docker-compose run --rm app sh -c "bundle install -j8 && yarn install && rails db:reset`
+
+bring up all containers:
+`docker-compose up -d`
+
+import the filings data from the web:
+`docker-compose exec app ./bin/rails filings:import_xml`
+
+visit:
+http://localhost:3000
+
+shutdown:
+`docker-compose down`
+
+NOTE: do not have a .env file that declares a DATABASE_URL as this will override the env var set in the docker-compose.yml file
+
+## Dokku
+
+You can run this on Dokku! And probably Heroku, though I've only put it on Dokku since Heroku got rid of their free tier:
+
+On the Dokku Server as root:
+`dokku apps:create filings-navigator`
+`dokku mysql:create filingsdb`
+`dokku mysql:link filingsdb filings-navigator`
+`dokku config filings-navigator` # get the DATABASE_URL THEN:
+`dokku config:set filings-navigator DATABASE_URL:<variable_from above, edit to start with mysql2>
+
+On your localhost in the cloned code respository:
+`git remote add dokku dokku@yourdomain.com:filings-navigator`
+`git push dokku master`
+
+On the Dokku server as root:
+`dokku run filings-navigator rails db:reset`
+`dokku run filings-navigator rails filings:import_xml`
+
+visit:
+http://filings-navigator.yoursub.domain.com
+
+
+
+# Original README:
+
 ## Installation
 
 - `bundle install`
