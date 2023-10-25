@@ -4,21 +4,6 @@ This is my implementation of the filings app. It uses a MySQL database and React
 
 Note that this project is using ruby 3.1.3 and node 16 for js compilation and bundling. You can use rbenv and nvm to manage versions.
 
-If you run on localhost, you'll need a mysql database running, grant all access to a user and create a .env file with those credentials, like so:
-
-echo 'DATABASE_URL="mysql2://user:pass@localhost/db_name"' > .env
-
-Then:
-
-`bundle install`
-`yarn install`
-`./bin/rails db:reset`
-`./bin/rails filings:import_xml`
-`./bin/dev`
-
-visit:
-http://localhost:3000
-
 ## General Notes:
 
 I chose React and am bundling with webpack. It's been a while since I've used React, and I actually wouldn't reach for it for a project like this. I'd much rather use Hotwire/Turbo/Stimlus for a project of this scope and it would work really well.
@@ -35,49 +20,67 @@ I would usually lint all my JS with eslint and AirBnB JS rules. I did not do thi
 
 I would probably do a lot more testing, I did test the XML parsing code as I wrote it to make dev a little faster there.
 
+## Run on Localhost:
 
-## Docker
+If you run on localhost, you'll need a mysql database running, grant all access to a user and create a .env file with those credentials, like so:
+
+echo 'DATABASE_URL="mysql2://user:pass@localhost/db_name"' > .env
+
+Then:
+
+- `bundle install`
+- `yarn install`
+- `./bin/rails db:reset`
+- `./bin/rails filings:import_xml`
+- `./bin/dev`
+
+visit:
+http://localhost:3000
+
+
+
+## Run with Docker:
 
 To get this up and runing on Docker with docker compose. Clone the repo and then from the code directory:
 
 build:
-`docker-compose build`
+- `docker-compose build`
 
 bundle install, yarn install and reset the db:
-`docker-compose run --rm app sh -c "bundle install -j8 && yarn install && rails db:reset`
+- `docker-compose run --rm app sh -c "bundle install -j8 && yarn install && rails db:reset`
 
 bring up all containers:
-`docker-compose up -d`
+- `docker-compose up -d`
 
 import the filings data from the web:
-`docker-compose exec app ./bin/rails filings:import_xml`
+- `docker-compose exec app ./bin/rails filings:import_xml`
 
 visit:
 http://localhost:3000
 
 shutdown:
-`docker-compose down`
+- `docker-compose down`
 
 NOTE: do not have a .env file that declares a DATABASE_URL as this will override the env var set in the docker-compose.yml file
 
-## Dokku
+## Run on a Dokku Installation (Heroku clone):
 
 You can run this on Dokku! And probably Heroku, though I've only put it on Dokku since Heroku got rid of their free tier:
 
 On the Dokku Server as root:
-`dokku apps:create filings-navigator`
-`dokku mysql:create filingsdb`
-`dokku mysql:link filingsdb filings-navigator`
-`dokku config filings-navigator` # get the DATABASE_URL THEN:
-`dokku config:set filings-navigator DATABASE_URL:<variable_from above, edit to start with mysql2>
+- `dokku apps:create filings-navigator`
+- `dokku mysql:create filingsdb`
+- `dokku mysql:link filingsdb filings-navigator`
+- `dokku config filings-navigator` # get the DATABASE_URL THEN:
+- `dokku config:set filings-navigator DATABASE_URL:<variable_from above, edit to start with mysql2>
 
 On your localhost in the cloned code respository:
-`git remote add dokku dokku@yourdomain.com:filings-navigator`
-`git push dokku master`
+- `git remote add dokku dokku@yourdomain.com:filings-navigator`
+- `git push dokku master`
 
 On the Dokku server as root:
-`dokku run filings-navigator rails db:reset`
-`dokku run filings-navigator rails filings:import_xml`
+- `dokku run filings-navigator rails db:reset`
+- `dokku run filings-navigator rails filings:import_xml`
 
 visit:
 http://filings-navigator.yoursub.domain.com
