@@ -8,6 +8,7 @@ export default function SideBar() {
       <ul>
         <li><Link to='/'>Filings</Link></li>
         <li><Link to='/filers'>Filers</Link></li>
+        <li><Link to='/recipients'>Recipients</Link></li>
       </ul>
     </nav>
   );

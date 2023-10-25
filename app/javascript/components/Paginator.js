@@ -24,13 +24,13 @@ export default function Paginator({
       <div className='twelve columns text-center'>
         <p>
           { currentPage > 1 && (<a onClick={ onFirstPage }>&lt;&lt;</a>) }
-          &nbsp;
+          &nbsp;&nbsp;
           { currentPage > 1 && (<a onClick={ onPrevPage }>&lt;</a>) }
-          &nbsp;
+          &nbsp;&nbsp;
           Page { currentPage } of { totalPages }
-          &nbsp;
+          &nbsp;&nbsp;
           { currentPage < totalPages && (<a onClick={ onNextPage }>&gt;</a>) }
-          &nbsp;
+          &nbsp;&nbsp;
           { currentPage < totalPages && (<a onClick={ onLastPage }>&gt;&gt;</a>) }
           <div className="limit">
             <select

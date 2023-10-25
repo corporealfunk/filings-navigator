@@ -14,10 +14,18 @@ class Api::AwardsController < ApplicationController
       page = 1
     end
 
-    filing = Filing.find_by_id!(params[:filing_id])
+    # TODO: this might not be the best way to scope awards to entities
+    # TODO: beware n+1 queries!
+    if params[:filing_id]
+      active_record_relation = Filing.find_by_id!(params[:filing_id])
+      active_record_relation = active_record_relation.awards.includes(:recipient).order(order)
+    elsif params[:recipient_id]
+      active_record_relation = Organization.find_by_id!(params[:recipient_id])
+      active_record_relation = active_record_relation.awards_received.joins(:filing).where('filings.is_canonical = ?', true).order(order)
+    end
 
     pagination_data = Paginator.setup_relation_and_pagination_data(
-      active_record_relation: filing.awards.includes(:recipient).order(order),
+      active_record_relation: active_record_relation,
       page: page,
       limit: limit
     )

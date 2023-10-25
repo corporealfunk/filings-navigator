@@ -1,2 +1,2 @@
-web: rm ./tmp/pids/server.pid; ./bin/rails s -b 0.0.0.0 -p 3000
-webpack: ./bin/webpack --watch
+-web: env RUBY_DEBUG_OPEN=true bin/rails server -b 0.0.0.0 -p 3000
+-js: yarn build --watch

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 // TODO: we don't really need axios, just use fetch API
 import axios from 'axios';
 
-import Awards from './Awards.js';
+import FilingAwards from './FilingAwards.js';
 
 function FilingData({ data }) {
   return (
@@ -78,7 +78,7 @@ export default function Filing() {
       <div>
         { isLoading ? loadingState : <FilingData data={ data } /> }
       </div>
-      { isLoading ? loadingState : <Awards
+      { isLoading ? loadingState : <FilingAwards
         filingId={ id }
       /> }
     </>

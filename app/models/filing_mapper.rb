@@ -44,8 +44,14 @@ class FilingMapper
         recipient_attrs = recipient_award[:recipient_attrs]
         award_attrs = recipient_award[:award_attrs]
 
-        # here we create the org regardless of ein/name combo
-        recipient = Organization.find_or_create_by(recipient_attrs)
+        # assume EIN / name combinations are unique
+        # should we have a unique DB key on those?
+        recipient = Organization.find_or_create_by(
+          ein: recipient_attrs[:ein],
+          name: recipient_attrs[:name]
+        )
+
+        recipient.update!(recipient_attrs)
 
         award = Award.find_or_create_by(
           filing: filing,

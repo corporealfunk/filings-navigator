@@ -11,6 +11,10 @@ Rails.application.routes.draw do
     resources :filers, :only => [:index, :show] do
       resources :filings, :only => [:index]
     end
+
+    resources :recipients, :only => [:index, :show] do
+      resources :awards, :only => [:index]
+    end
   end
 
   get '*path', to: "home#index", constraints: ->(request) do

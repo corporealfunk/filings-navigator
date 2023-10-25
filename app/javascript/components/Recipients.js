@@ -4,47 +4,38 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Paginator from './Paginator.js';
 
-function TableRow({ filingId, filer, taxPeriodEndDate, returnTimestamp, awardsCount, isCanonical }) {
+function TableRow({ recipient }) {
 
-  const filingPath = `/filings/${filingId}`;
+  const recipientPath = `/recipients/${recipient.id}`;
 
   const navigate = useNavigate();
   return (
-    <tr key={ filingId } onClick={ () => navigate(filingPath) }>
+    <tr key={ recipient.id } onClick={ () => navigate(recipientPath) }>
       <td>
-        <Link to={ filingPath }>{ filingId }</Link>
+        <Link to={ recipientPath }>{ recipient.id }</Link>
       </td>
       <td>
-        { filer.name }
+        { recipient.name }
         <br/>
         <span class="subdata">
-          { filer.address_city }, { filer.address_state }
+          { recipient.address_city }, { recipient.address_state }
         </span>
       </td>
-      <td>{ new Date(taxPeriodEndDate).toLocaleDateString() }</td>
-      <td>{ new Date(returnTimestamp).toLocaleDateString() }</td>
-      <td>{ awardsCount }</td>
-      <td>{ isCanonical && <span class="check">&#10003;</span> }</td>
+      <td>{ recipient.ein }</td>
     </tr>
   )
 }
 
-export default function Filings({ filerId }) {
+export default function Recipients() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(20);
   const [page, setPage] = useState(1);
-
-  let filerScope = '';
-
-  if (filerId) {
-    filerScope = `/filers/${filerId}`;
-  }
 
   const getData = async(page, limit) => {
     setIsLoading(true);
-    const response = await axios.get(`/api${filerScope}/filings?page=${page}&limit=${limit}`);
+    const response = await axios.get(`/api/recipients?page=${page}&limit=${limit}`);
     setData(response.data);
     setIsLoading(false);
   }
@@ -65,7 +56,7 @@ export default function Filings({ filerId }) {
 
   return (
     <>
-      <h3>Filings ({ !isLoading && data.pagination.total_records })</h3>
+      <h3>Recipients ({ !isLoading && data.pagination.total_records })</h3>
       { isLoading ? null : <Paginator
         currentPage={ data.pagination.current_page }
         totalPages={ data.pagination.total_pages }
@@ -83,22 +74,13 @@ export default function Filings({ filerId }) {
         <table class="u-full-width">
           <thead>
             <th>Id</th>
-            <th>Filer</th>
-            <th>Tax Year End</th>
-            <th>Filing Date</th>
-            <th>Awards Count</th>
-            <th>Canonical</th>
+            <th>Recipient</th>
+            <th>EIN</th>
           </thead>
           <tbody className='clickable'>
-            { data.data.map((filing) => (
+            { data.data.map((recipient) => (
                 <TableRow
-                  filingId={filing.id}
-                  filer={filing.filer}
-                  taxPeriodEndDate={filing.tax_period_end_date}
-                  returnTimestamp={filing.return_timestamp}
-                  awardsCount={filing.awards_count}
-                  awardsPath={filing.awards_path}
-                  isCanonical={filing.is_canonical}
+                  recipient={recipient}
                 />
               )
             )}

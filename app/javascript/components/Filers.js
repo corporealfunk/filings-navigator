@@ -55,7 +55,7 @@ export default function Filers() {
 
   return (
     <>
-      <h3>Filers</h3>
+      <h3>Filers ({ !isLoading && data.pagination.total_records })</h3>
       { isLoading ? null : <Paginator
         currentPage={ data.pagination.current_page }
         totalPages={ data.pagination.total_pages }

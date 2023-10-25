@@ -1,4 +1,4 @@
-class Api::FilingsController < ApplicationController
+class Api::RecipientsController < ApplicationController
   def index
     # TODO: DRY this out where we have it
     page = (params[:page] || 1).to_i
@@ -14,22 +14,13 @@ class Api::FilingsController < ApplicationController
       page = 1
     end
 
-    active_record_relation = Filing.includes(:filer).sorted
-
-    # if we are scoped to a filer, lets include that:
-    if params[:filer_id]
-       active_record_relation = active_record_relation.where(
-         filer: params[:filer_id]
-       )
-    end
-
     pagination_data = Paginator.setup_relation_and_pagination_data(
-      active_record_relation: active_record_relation,
+      active_record_relation: Organization.recipients.sorted,
       page: page,
       limit: limit
     )
 
-    @filings = pagination_data[:data]
+    @recipients = pagination_data[:data]
     @pagination = pagination_data[:pagination]
 
 
@@ -42,6 +33,6 @@ class Api::FilingsController < ApplicationController
   end
 
   def show
-    @filing = Filing.find(params[:id])
+    @recipient = Organization.find(params[:id])
   end
 end
